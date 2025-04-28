@@ -2,12 +2,6 @@ name: Test container image build
 
 on:
   workflow_call:
-    inputs:
-      quay_image:
-        description: 'Name of quay image to build'
-        required: false
-        default: 'test'
-        type: string
 
 jobs:
   test-build:
@@ -32,10 +26,6 @@ jobs:
       id: read_action_js
       with:
         config: ${{ github.workspace }}/myst.yml
-
-    - name: Print the environment name
-      run: |
-        echo environment name: ${{ steps.read_action_js.outputs['project.id'] }}
 
     - name: Build the image and push it if `NO_PUSH` disabled
       uses: jupyterhub/repo2docker-action@master
