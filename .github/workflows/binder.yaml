@@ -27,5 +27,5 @@ jobs:
             body: BODY
           })
       env:
-        PR_HEAD_REF: ${{ inputs.pr }}.head.ref
-        PR_HEAD_USERREPO: ${{ inputs.pr }}.repo.full_name
+        PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        PR_HEAD_USERREPO: ${{ github.event.pull_request.head.repo.full_name }}
