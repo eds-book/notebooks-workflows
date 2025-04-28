@@ -36,7 +36,7 @@ jobs:
       - name: Run the build process with Docker
         uses: addnab/docker-run-action@v3
         with:
-            image: quay.io/${{ steps.read_action_js.outputs['project.id'] }}:latest
+            image: quay.io/edsbook/${{ steps.read_action_js.outputs['project.id'] }}:latest
             options: --user root -v ${{ github.workspace }}:/tmp
             shell: bash
             run: |
