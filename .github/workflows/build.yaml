@@ -28,10 +28,6 @@ jobs:
     - name: Checkout files in repo
       uses: actions/checkout@main
 
-    - name: Get GitHub environment variables
-      id: get-env
-      uses: FranzDiebold/github-env-vars-action@v2
-
     - name: Fetch myst.yml file
       uses: ndelangen/action-read-yaml@1.1.0
       id: read_action_js
