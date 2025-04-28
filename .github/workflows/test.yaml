@@ -19,7 +19,7 @@ jobs:
     # https://github.com/actions/virtual-environments/issues/2606#issuecomment-772683150
     # and https://github.com/easimon/maximize-build-space/blob/b4d02c14493a9653fe7af06cc89ca5298071c66e/action.yml#L104
     # This gives us a total of about 52G of free space, which should be enough for now
-    - name: cleanup disk space
+    - name: Cleanup disk space
       run: |
         sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
         df -h
@@ -27,13 +27,13 @@ jobs:
     - name: Checkout files in repo
       uses: actions/checkout@main
 
-    - name: read-yaml-file
-      uses: pietrobolcato/action-read-yaml@1.0.0
+    - name: Fetch myst.yml file
+      uses: ndelangen/action-read-yaml@1.1.0
       id: read_action_js
       with:
         config: ${{ github.workspace }}/myst.yml
 
-    - name: use-yaml-file
+    - name: Print the environment name
       run: |
         echo environment name: ${{ steps.read_action_js.outputs['project.id'] }}
 
