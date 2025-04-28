@@ -2,10 +2,23 @@ name: Build and push container image
 
 on:
   workflow_call:
+    secrets:
+      QUAY_USERNAME:
+        description: 'Username for Quay.io'
+        required: false
+      QUAY_PASSWORD:
+        description: 'Password for Quay.io'
+        required: false
   push:
     branches:
       - main
       - postprint
+    workflow_dispatch:
+
+env:
+  # `BASE_URL` determines the website is served from, including CSS & JS assets
+  # You may need to change this to `BASE_URL: ''`
+  BASE_URL: /${{ github.event.repository.name }}
 
 jobs:
   build-and-push:
