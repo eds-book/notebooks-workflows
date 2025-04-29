@@ -25,6 +25,8 @@ jobs:
       - name: Fetch myst.yml file
         uses: ndelangen/action-read-yaml@1.1.0
         id: read_action_js
+        with:
+          config: ${{ github.workspace }}/myst.yml
       # Render the notebook
       - name: Run the build process with Docker
         uses: addnab/docker-run-action@v3
