@@ -29,13 +29,13 @@ jobs:
       - name: Run the build process with Docker
         uses: addnab/docker-run-action@v3
         with:
-            image: quay.io/${{steps.config_quay.outputs.prop}}:latest
+            image: quay.io/edsbook/${{ steps.read_action_js.outputs['project.id'] }}:latest
             options: --user root -v ${{ github.workspace }}:/tmp
             shell: bash
             run: |
-                v=$(jupyter kernelspec list | awk '{print $1}' | egrep ${{steps.config_kernel.outputs.prop}})
-                jupyter-nbconvert --to notebook --ExecutePreprocessor.kernel_name="$v" --inplace --execute ${{steps.config_file.outputs.prop}}
-                cp ${{steps.config_file.outputs.prop}}  /tmp
+                v=$(jupyter kernelspec list | awk '{print $1}' | egrep ${{ steps.read_action_js.outputs['project.jupyter.binder.kernelName'] }})
+                jupyter-nbconvert --to notebook --ExecutePreprocessor.kernel_name="$v" --inplace --execute ${{ steps.read_action_js.outputs['project.toc.0.file'] }}
+                cp ${{ steps.read_action_js.outputs['project.toc.0.file' ]}}  /tmp
       - name: Commit
         run: |
           ls
