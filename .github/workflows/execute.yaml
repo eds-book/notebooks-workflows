@@ -2,11 +2,6 @@ name: Execute Notebook
 
 on:
   workflow_call:
-    inputs:
-      branch:
-        description: 'Branch name to host notebook with output cells'
-        required: true
-        type: string
   workflow_run:
     workflows: ["Build and push container image"]
     branches: [main, postprint]
@@ -50,11 +45,19 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add ${{ steps.read_action_js.outputs['project.toc.0.file'] }}
           git commit -m 'update'
-      - name: Push
+      - name: Push (render)
+        if: github.event.workflow_run.head_branch == 'refs/heads/main'
         uses: ad-m/github-push-action@master
         with:
          github_token: ${{ secrets.GITHUB_TOKEN }}
-         branch: ${{ inputs.branch }}
+         branch: 'render'
+         force: true
+      - name: Push (preview)
+        if: github.event.workflow_run.head_branch == 'refs/heads/postprint'
+        uses: ad-m/github-push-action@master
+        with:
+         github_token: ${{ secrets.GITHUB_TOKEN }}
+         branch: 'preview'
          force: true
   on-failure:
     runs-on: ubuntu-latest
