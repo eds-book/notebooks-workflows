@@ -3,7 +3,7 @@ on:
   workflow_call:
   workflow_run:
     workflows: ["Execute Notebook"]
-    branches: [main, postprint]
+    branches: [main]
     types: [completed]
 
 env:
