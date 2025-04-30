@@ -26,7 +26,7 @@ jobs:
       - name: Checkout files in repo
         uses: actions/checkout@main
         with:
-          ref: postprint
+          ref: ${{ github.event.workflow_run.head_branch }}
       - name: Fetch myst.yml file
         uses: ndelangen/action-read-yaml@1.1.0
         id: read_action_js
