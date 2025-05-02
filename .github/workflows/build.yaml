@@ -11,6 +11,9 @@ on:
         required: false
   push:
     branches: [main, postprint]
+    paths-ignore:
+      - 'netlify.md'
+      - 'README.md'
     workflow_dispatch:
 
 jobs:
