@@ -37,7 +37,7 @@ jobs:
             run: |
                 v=$(jupyter kernelspec list | awk '{print $1}' | egrep ${{ steps.read_action_js.outputs['project.jupyter.binder.kernelName'] }})
                 jupyter-nbconvert --to notebook --ExecutePreprocessor.kernel_name="$v" --inplace --execute ${{ steps.read_action_js.outputs['project.toc.1.file'] }}
-                cp ${{ steps.read_action_js.outputs['project.toc.0.file' ]}}  /tmp
+                cp ${{ steps.read_action_js.outputs['project.toc.1.file' ]}}  /tmp
       - name: Commit
         run: |
           ls
