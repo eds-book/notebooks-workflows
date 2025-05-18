@@ -1,7 +1,6 @@
 name: Execute Notebook
 
 on:
-  workflow_call:
   workflow_run:
     workflows: ["Build and push container image"]
     branches: [main, postprint]
