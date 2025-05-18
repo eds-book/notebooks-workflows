@@ -1,6 +1,5 @@
 name: MyST GitHub Pages Deploy
 on:
-  workflow_call:
   workflow_run:
     workflows: ["Execute Notebook"]
     branches: [main]
