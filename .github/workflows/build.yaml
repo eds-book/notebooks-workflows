@@ -9,11 +9,6 @@ on:
       QUAY_PASSWORD:
         description: 'Password for Quay.io'
         required: false
-  push:
-    branches: [main, postprint]
-    paths-ignore:
-      - 'README.md'
-    workflow_dispatch:
 
 jobs:
   build-and-push:
@@ -52,7 +47,6 @@ jobs:
 
         # Uncomment and modify the following line with your image name, otherwise no push will happen
         IMAGE_NAME: edsbook/${{ steps.read_action_js.outputs['project.id'] }}_preview
-
 
     # Lets us monitor disks getting full as images get bigger over time
     - name: Show how much disk space is left
