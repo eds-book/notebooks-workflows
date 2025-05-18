@@ -2,7 +2,7 @@ name: Build and push container image
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/1 * * * *"
   workflow_call:
     secrets:
       QUAY_USERNAME:
