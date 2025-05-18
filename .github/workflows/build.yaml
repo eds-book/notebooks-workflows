@@ -1,4 +1,4 @@
-name: Build and push container image
+name: Build and execute notebook
 
 on:
   workflow_call:
@@ -11,7 +11,7 @@ on:
         required: false
 
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'eds-book'
     steps:
@@ -48,6 +48,52 @@ jobs:
         # Uncomment and modify the following line with your image name, otherwise no push will happen
         IMAGE_NAME: edsbook/${{ steps.read_action_js.outputs['project.id'] }}_preview
 
-    # Lets us monitor disks getting full as images get bigger over time
-    - name: Show how much disk space is left
-      run: df -h
+  execute:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.repository_owner == 'eds-book'
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - name: Checkout files in repo
+        uses: actions/checkout@main
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+      - name: Fetch myst.yml file
+        uses: ndelangen/action-read-yaml@1.1.0
+        id: read_action_js
+        with:
+          config: ${{ github.workspace }}/myst.yml
+      # Render the notebook
+      - name: Run the build process with Docker
+        uses: addnab/docker-run-action@v3
+        with:
+          image: quay.io/edsbook/${{ steps.read_action_js.outputs['project.id'] }}:latest
+          options: --user root -v ${{ github.workspace }}:/tmp
+          shell: bash
+          run: |
+            v=$(jupyter kernelspec list | awk '{print $1}' | egrep ${{ steps.read_action_js.outputs['project.jupyter.binder.kernelName'] }})
+            jupyter-nbconvert --to notebook --ExecutePreprocessor.kernel_name="$v" --inplace --execute ${{ steps.read_action_js.outputs['project.toc.1.file'] }}
+            cp ${{ steps.read_action_js.outputs['project.toc.1.file' ]}}  /tmp
+      - name: Commit
+        run: |
+          ls
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add ${{ steps.read_action_js.outputs['project.toc.1.file'] }}
+          git commit -m 'update'
+      - name: Push (render)
+        if: github.event.workflow_run.head_branch == 'main'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: 'render'
+          force: true
+      - name: Push (preview)
+        if: github.event.workflow_run.head_branch == 'postprint'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: 'preview'
+          force: true
