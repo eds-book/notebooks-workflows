@@ -1,8 +1,5 @@
 name: Test container image build
 
-on:
-  workflow_call:
-
 jobs:
   test-build:
     runs-on: ubuntu-latest
