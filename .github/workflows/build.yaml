@@ -84,14 +84,14 @@ jobs:
           git add ${{ steps.read_action_js.outputs['project.toc.1.file'] }}
           git commit -m 'update'
       - name: Push (render)
-        if: github.event.push.head_branch == 'main'
+        if: contains(github.ref, 'main')
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: 'render'
           force: true
       - name: Push (preview)
-        if: github.event.push.head_branch == 'postprint'
+        if: contains(github.ref, 'postprint')
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
