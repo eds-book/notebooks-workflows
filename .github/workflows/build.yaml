@@ -1,4 +1,4 @@
-name: Build and execute
+name: build-execute
 
 on:
   workflow_call:

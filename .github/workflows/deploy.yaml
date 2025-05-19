@@ -1,4 +1,11 @@
-name: MyST GitHub Pages Deploy
+name: deploy-gh-pages
+
+on:
+  workflow_call:
+  workflow_run:
+    workflows: ["build-execute"]
+    branches: [main]
+    types: [completed]
 
 env:
   # `BASE_URL` determines the website is served from, including CSS & JS assets
