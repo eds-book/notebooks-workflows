@@ -1,12 +1,5 @@
 name: MyST GitHub Pages Deploy
 
-on:
-  workflow_call:
-  workflow_run:
-    workflows: ["Build and execute","monthly-build"]
-    branches: [main]
-    types: [completed]
-
 env:
   # `BASE_URL` determines the website is served from, including CSS & JS assets
   # You may need to change this to `BASE_URL: ''`
@@ -31,12 +24,12 @@ jobs:
     if: github.repository_owner == 'eds-book'
     steps:
       - name: Checkout (render)
-        if: github.event.workflow_run.head_branch == 'main'
+        if: contains(github.ref, 'main')
         uses: actions/checkout@v4
         with:
           ref: 'render'
       - name: Checkout (preview)
-        if: github.event.workflow_run.head_branch == 'postprint'
+        if: contains(github.ref, 'postprint')
         uses: actions/checkout@v4
         with:
           ref: 'preview'
