@@ -81,6 +81,11 @@ jobs:
       # Render the notebook
       - name: Run the build process with Docker
         uses: addnab/docker-run-action@v3
+        env:
+          EUMESAT_API_KEY: ${{ secrets.EUMESAT_API_KEY }}
+          EUMESAT_API_SECRET: ${{ secrets.EUMESAT_API_SECRET }}
+          NASA_EARTHDATA_USER: ${{ secrets.NASA_EARTHDATA_USER }}
+          NASA_EARTHDATA_PWD: ${{ secrets.NASA_EARTHDATA_PWD }}
         with:
           image: quay.io/edsbook/${{ steps.read_action_js.outputs['project.id'] }}:latest
           options: --user root -v ${{ github.workspace }}:/tmp
