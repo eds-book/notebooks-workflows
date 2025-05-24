@@ -3,12 +3,19 @@ name: build-execute
 on:
   workflow_call:
     secrets:
+      EUMESAT_API_KEY:
+        description: 'EUMESAT API Username'
+        required: false
+      EUMESAT_API_SECRET:
+        description: 'EUMESAT API Password'
+        required: false
       QUAY_USERNAME:
         description: 'Username for Quay.io'
         required: false
       QUAY_PASSWORD:
         description: 'Password for Quay.io'
         required: false
+
 
 jobs:
   build:
