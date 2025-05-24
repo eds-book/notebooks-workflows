@@ -9,6 +9,12 @@ on:
       EUMESAT_API_SECRET:
         description: 'EUMESAT API Password'
         required: false
+      NASA_EARTHDATA_USER:
+        description: 'NASA EARTHDATA API Username'
+        required: false
+      NASA_EARTHDATA_PWD:
+        description: 'NASA EARTHDATA API Password'
+        required: false
       QUAY_USERNAME:
         description: 'Username for Quay.io'
         required: false
