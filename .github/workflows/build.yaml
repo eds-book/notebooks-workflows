@@ -108,6 +108,13 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: 'render'
           force: true
+      - name: Push (review)
+        if: contains(github.ref, 'review')
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: 'review'
+          force: true
       - name: Push (preview)
         if: contains(github.ref, 'postprint')
         uses: ad-m/github-push-action@master
