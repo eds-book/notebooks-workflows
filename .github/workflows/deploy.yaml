@@ -35,6 +35,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: 'render'
+      - name: Checkout (review)
+        if: contains(github.ref, 'review')
+        uses: actions/checkout@v4
+        with:
+          ref: 'preview'
       - name: Checkout (preview)
         if: contains(github.ref, 'postprint')
         uses: actions/checkout@v4
