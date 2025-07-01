@@ -79,7 +79,7 @@ jobs:
         with:
           config: ${{ github.workspace }}/myst.yml
       # Render the notebook
-      - name: Run the build process with Docker (preview)
+      - name: Run the build process with Docker (render)
         if: contains(github.ref, 'main')
         uses: addnab/docker-run-action@v3
         env:
