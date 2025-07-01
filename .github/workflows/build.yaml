@@ -109,7 +109,7 @@ jobs:
           branch: 'render'
           force: true
       - name: Push (preview)
-        if: contains(github.ref, 'review') || contains(github.ref, 'postprint')
+        if: contains(github.ref, 'preparation') || contains(github.ref, 'review') || contains(github.ref, 'postprint')
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
