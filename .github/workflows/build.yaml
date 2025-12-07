@@ -50,7 +50,7 @@ jobs:
         IMAGE_NAME: edsbook/${{ steps.read_action_js.outputs['project.id'] }}
 
     - name: Build and push the image to quay.io (preview)
-      if: contains(github.ref, 'postprint')
+      if: contains(github.ref, 'preparation') || contains(github.ref, 'review') || contains(github.ref, 'postprint')
       uses: jupyterhub/repo2docker-action@master
       with:
         # Make sure username & password/token pair matches your registry credentials
@@ -79,7 +79,8 @@ jobs:
         with:
           config: ${{ github.workspace }}/myst.yml
       # Render the notebook
-      - name: Run the build process with Docker
+      - name: Run the build process with Docker (render)
+        if: contains(github.ref, 'main')
         uses: addnab/docker-run-action@v3
         env:
           EUMESAT_API_KEY: ${{ secrets.EUMESAT_API_KEY }}
@@ -88,6 +89,22 @@ jobs:
           NASA_EARTHDATA_PWD: ${{ secrets.NASA_EARTHDATA_PWD }}
         with:
           image: quay.io/edsbook/${{ steps.read_action_js.outputs['project.id'] }}:latest
+          options: --user root -v ${{ github.workspace }}:/tmp -e EUMESAT_API_KEY -e EUMESAT_API_SECRET -e NASA_EARTHDATA_USER -e NASA_EARTHDATA_PWD
+          shell: bash
+          run: |
+            v=$(jupyter kernelspec list | awk '{print $1}' | egrep ${{ steps.read_action_js.outputs['project.jupyter.binder.kernelName'] }})
+            jupyter-nbconvert --to notebook --ExecutePreprocessor.kernel_name="$v" --inplace --execute ${{ steps.read_action_js.outputs['project.toc.1.file'] }}
+            cp ${{ steps.read_action_js.outputs['project.toc.1.file' ]}}  /tmp
+      - name: Run the build process with Docker (preview)
+        if: contains(github.ref, 'preparation') || contains(github.ref, 'review') || contains(github.ref, 'postprint')
+        uses: addnab/docker-run-action@v3
+        env:
+          EUMESAT_API_KEY: ${{ secrets.EUMESAT_API_KEY }}
+          EUMESAT_API_SECRET: ${{ secrets.EUMESAT_API_SECRET }}
+          NASA_EARTHDATA_USER: ${{ secrets.NASA_EARTHDATA_USER }}
+          NASA_EARTHDATA_PWD: ${{ secrets.NASA_EARTHDATA_PWD }}
+        with:
+          image: quay.io/edsbook/${{ steps.read_action_js.outputs['project.id'] }}_preview:latest
           options: --user root -v ${{ github.workspace }}:/tmp -e EUMESAT_API_KEY -e EUMESAT_API_SECRET -e NASA_EARTHDATA_USER -e NASA_EARTHDATA_PWD
           shell: bash
           run: |
@@ -109,7 +126,7 @@ jobs:
           branch: 'render'
           force: true
       - name: Push (preview)
-        if: contains(github.ref, 'postprint')
+        if: contains(github.ref, 'preparation') || contains(github.ref, 'review') || contains(github.ref, 'postprint')
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
